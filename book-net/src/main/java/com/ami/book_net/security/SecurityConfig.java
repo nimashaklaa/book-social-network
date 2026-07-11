@@ -10,6 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * The master control switch for security in the application.
+ * Instead of hitting the Controller immediately, every single incoming HTTP request has to walk down a long hallway filled with guards standing in a line. Each guard is a Filter, and together they make up the FilterChain.
  */
 
 @Configuration //take the object it returns, and manage it globally
@@ -18,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(securedEnabled = true) //This activates role-based security directly on top of your Controller methods using Java annotations.
 
 public class SecurityConfig {
-    @Bean
+    @Bean // The @Bean annotation is the bridge that connects your custom code to Spring’s engine.
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         return null;
     }
