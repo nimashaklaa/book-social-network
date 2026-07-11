@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity //it maps directly to a database table using JPA/Hibernate.
 @EntityListeners(AuditingEntityListener.class)
 public class Role {
 
