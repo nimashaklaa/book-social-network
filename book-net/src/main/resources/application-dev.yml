@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/book_social_network}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/bsn}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -39,3 +39,6 @@ application:
     mailing:
       frontend:
         activation-url: http://localhost:4200/activate-account
+
+server:
+  port: 8080
