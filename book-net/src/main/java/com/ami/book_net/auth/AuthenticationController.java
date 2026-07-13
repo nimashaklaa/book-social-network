@@ -1,6 +1,7 @@
 package com.ami.book_net.auth;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class AuthenticationController {
     public ResponseEntity<?> register(
             @RequestBody @Valid RegistrationRequest request
             // @Valid -> This triggers your Jakarta/Hibernate Validator engine.
-    ) {
+    ) throws MessagingException {
         service.register(request);
         return ResponseEntity.accepted().build();
     }

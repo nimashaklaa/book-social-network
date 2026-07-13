@@ -1,5 +1,6 @@
 package com.ami.book_net.email;
 
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,6 +18,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
 
@@ -28,7 +30,7 @@ public class EmailService {
             String confirmationUrl,
             String activationCode,
             String subject
-    ) throws Exception{
+    ) throws MessagingException {
         String templateName;
         if(emailTemplate == null){
             templateName="confirm-email";

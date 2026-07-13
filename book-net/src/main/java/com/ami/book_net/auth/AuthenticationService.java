@@ -7,6 +7,7 @@ import com.ami.book_net.user.Token;
 import com.ami.book_net.user.TokenRepository;
 import com.ami.book_net.user.User;
 import com.ami.book_net.user.UserRepository;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +32,7 @@ public class AuthenticationService {
     @Value("${application.security.mailing.frontend.activation-url}")
     private String activationUrl;
 
-    public void register(@Valid RegistrationRequest request) {
+    public void register(@Valid RegistrationRequest request) throws MessagingException {
         var userRole = roleRepository.findByName("USER").orElseThrow(
                 ()-> new IllegalStateException("USER ROLE was not initialized")
         );
@@ -48,7 +49,7 @@ public class AuthenticationService {
         sendValidationEmail(user);
     }
 
-    private void sendValidationEmail(User user) {
+    private void sendValidationEmail(User user) throws MessagingException {
         var newToken = generateAndSaveActivationToken(user);
 
         emailService.sendEmail(
