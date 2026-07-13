@@ -1,5 +1,7 @@
 package com.ami.book_net.auth;
 
+import com.ami.book_net.email.EmailService;
+import com.ami.book_net.email.EmailTemplateName;
 import com.ami.book_net.role.RoleRepository;
 import com.ami.book_net.user.Token;
 import com.ami.book_net.user.TokenRepository;
@@ -7,6 +9,8 @@ import com.ami.book_net.user.User;
 import com.ami.book_net.user.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +24,12 @@ public class AuthenticationService {
 
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
+    private final EmailService emailService;
+
+    @Value("${application.security.mailing.frontend.activation-url}")
+    private String activationUrl;
 
     public void register(@Valid RegistrationRequest request) {
         var userRole = roleRepository.findByName("USER").orElseThrow(
@@ -43,6 +50,15 @@ public class AuthenticationService {
 
     private void sendValidationEmail(User user) {
         var newToken = generateAndSaveActivationToken(user);
+
+        emailService.sendEmail(
+                user.getEmail(),
+                user.fullName(),
+                EmailTemplateName.ACTIVATE_ACCOUNT,
+                activationUrl,
+                newToken,
+                "Account activation"
+        );
 
 
     }
