@@ -27,7 +27,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
-    private JwtFilter jwtFilter;
+    private final JwtFilter jwtAuthFilter;
 
     @Bean // The @Bean annotation is the bridge that connects your custom code to Spring’s engine.
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
