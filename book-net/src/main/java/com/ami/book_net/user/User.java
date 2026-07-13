@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity  //marks this class as a database table
-@Table(name = "user")
+@Table(name = "users")
 @EntityListeners(AuditingEntityListener.class) //enables automatic timestamp tracking
 
 // Database model — maps to a user table via JPA
