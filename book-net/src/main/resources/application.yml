@@ -1,32 +1,13 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/book_social_network
-    username: username
-    password: password
-    driver-class-name: org.postgresql.Driver
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 50MB
 
-  jpa:
-    hibernate:
-      ddl-auto: update # auto-creates/updates tables
-    show-sql: false # print SQL in console
-    properties:
-      hibernate:
-        format_sql: true
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+springdoc:
+  default-produces-media-type: application/json
 
-  mail:
-    host: localhost
-    port: 1025
-    username: username
-    password: password
-    properties:
-      mail:
-        smtp:
-          trust:"*"
-        auth: true
-        starttls:
-          enable: true
-        connectiontimeout: 5000
-        timeout: 3000
-        writetimeout: 5000
+server:
+  servlet:
+    context-path: /api/v1
