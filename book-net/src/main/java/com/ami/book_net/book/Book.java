@@ -2,6 +2,7 @@ package com.ami.book_net.book;
 
 import com.ami.book_net.common.BaseEntity;
 import com.ami.book_net.feedback.Feedback;
+import com.ami.book_net.history.BookTransactionHistory;
 import com.ami.book_net.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,4 +35,7 @@ public class Book extends BaseEntity {
 
     @OneToMany(mappedBy = "book")
     private List<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "book")
+    private List<BookTransactionHistory> histories;
 }
