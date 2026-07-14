@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.ami.book_net.book.BookSpecification.withOwnerId;
 
@@ -117,9 +116,20 @@ public class BookService {
         User user = (User) connectedUser.getPrincipal();
         Book book = bookRepository.findById(bookId).orElseThrow(()-> new EntityNotFoundException("No book found with the Id"+bookId));
         if(!Objects.equals(book.getOwner().getId(),user.getId())){
-            throw new OperationNotPermittedException("You cannot update books shareable status");
+            throw new OperationNotPermittedException("You cannot update others books shareable status");
         }
         book.setShareable(!book.isShareable());
+        bookRepository.save(book);
+        return bookId;
+    }
+
+    public Integer updateBookArchivedStatus(Integer bookId, Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        Book book = bookRepository.findById(bookId).orElseThrow(()-> new EntityNotFoundException("No book found with the Id"+bookId));
+        if(!Objects.equals(book.getOwner().getId(),user.getId())){
+            throw new OperationNotPermittedException("You cannot update others books archived status");
+        }
+        book.setArchived(!book.isArchived());
         bookRepository.save(book);
         return bookId;
     }
