@@ -106,6 +106,7 @@ public class AuthenticationService {
         var user = ((User) auth.getPrincipal());
         claims.put("fullname", user.fullName());
         var jwtToken = jwtService.generateToken(claims, user);
+//        this returns a JWT token -> eg: eyJhbGciOiJIUzI1NiJ9.eyJmdWxsbmFtZSI6IkFtYW5kaSBOaW1hc2hhIiwic3ViIjoic2Nvb2J5QHdpc2RvbWRlbW8uY29tIiwiaWF0IjoxNzg0MDAzMjIxLCJleHAiOjE3ODQwMTE4NjEsImF1dGhvcml0aWVzIjpbIlVTRVIiXX0.Wy3pxKEKhwc319ig9B5TzGpmEzIauALx3KhPZD_Flxg
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
