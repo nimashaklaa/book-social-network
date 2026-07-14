@@ -81,7 +81,7 @@ public class BookService {
     public Integer updateBookShareableStatus(Integer bookId, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
         Book book = findBookByIdHelper(bookId);
-        validateBookOwnership(book, user, "You cannot update others books shareable status");
+        validateUserIsNotOwner(book, user, "You cannot update others books shareable status");
         book.setShareable(!book.isShareable());
         bookRepository.save(book);
         return bookId;
@@ -90,7 +90,7 @@ public class BookService {
     public Integer updateBookArchivedStatus(Integer bookId, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
         Book book = findBookByIdHelper(bookId);
-        validateBookOwnership(book, user, "You cannot update others books archived status");
+        validateUserIsNotOwner(book, user, "You cannot update others books archived status");
         book.setArchived(!book.isArchived());
         bookRepository.save(book);
         return bookId;
@@ -102,7 +102,7 @@ public class BookService {
         if(!book.isArchived() || !book.isShareable()){
             throw new OperationNotPermittedException("You cannot borrow this book because it is not available");
         }
-        validateBookOwnership(book, user, "You cannot borrow your own book");
+        validateUserIsOwner(book, user);
         final boolean isAlreadyBorrowed = bookTransactionHistoryRepository.isAlreadyBorrowed(bookId, user.getId());
         if(isAlreadyBorrowed){
             throw new OperationNotPermittedException("You cannot borrow this book because you already borrowed it");
@@ -126,9 +126,20 @@ public class BookService {
         if(!book.isArchived() || !book.isShareable()){
             throw new OperationNotPermittedException("You cannot borrow this book because it is not available");
         }
-        validateBookOwnership(book, user, "You cannot return this book because you did not borrow it");
+        validateUserIsOwner(book, user);
         BookTransactionHistory borrowedHistory = bookTransactionHistoryRepository.findBookByUserIdAndBookId(bookId, user.getId()).orElseThrow(()-> new OperationNotPermittedException("You cannot return this book because you did not borrow it"));
         borrowedHistory.setReturned(true);
+        return bookTransactionHistoryRepository.save(borrowedHistory).getId();
+    }
+    public Integer approveReturnBook(Integer bookId, Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        Book book = findBookByIdHelper(bookId);
+        if(!book.isArchived() || !book.isShareable()){
+            throw new OperationNotPermittedException("You cannot borrow this book because it is not available");
+        }
+        validateUserIsOwner(book, user);
+        BookTransactionHistory borrowedHistory = bookTransactionHistoryRepository.findBookByOwnerIdAndBookId(bookId, user.getId()).orElseThrow(()-> new OperationNotPermittedException("You cannot approve this book return because you did not borrow it"));
+        borrowedHistory.setReturnApproved(true);
         return bookTransactionHistoryRepository.save(borrowedHistory).getId();
     }
 
@@ -148,9 +159,16 @@ public class BookService {
                 pageMetaData.isLast()
         );
     }
-    private void validateBookOwnership(Book book, User user, String exceptionMessage) {
-        if (!Objects.equals(book.getOwner().getId(), user.getId())) {
+    private void validateUserIsOwner(Book book, User user) {
+        if (Objects.equals(book.getOwner().getId(), user.getId())) {
+            throw new OperationNotPermittedException("You cannot borrow your own book");
+        }
+    }
+    private void validateUserIsNotOwner(Book book, User user, String exceptionMessage) {
+        if (Objects.equals(book.getOwner().getId(), user.getId())) {
             throw new OperationNotPermittedException(exceptionMessage);
         }
     }
+
+
 }
