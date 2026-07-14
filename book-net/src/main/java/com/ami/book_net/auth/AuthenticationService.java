@@ -9,12 +9,14 @@ import com.ami.book_net.user.TokenRepository;
 import com.ami.book_net.user.User;
 import com.ami.book_net.user.UserRepository;
 import jakarta.mail.MessagingException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -104,8 +106,24 @@ public class AuthenticationService {
         var user = ((User) auth.getPrincipal());
         claims.put("fullname", user.fullName());
         var jwtToken = jwtService.generateToken(claims, user);
+//        this returns a JWT token -> eg: eyJhbGciOiJIUzI1NiJ9.eyJmdWxsbmFtZSI6IkFtYW5kaSBOaW1hc2hhIiwic3ViIjoic2Nvb2J5QHdpc2RvbWRlbW8uY29tIiwiaWF0IjoxNzg0MDAzMjIxLCJleHAiOjE3ODQwMTE4NjEsImF1dGhvcml0aWVzIjpbIlVTRVIiXX0.Wy3pxKEKhwc319ig9B5TzGpmEzIauALx3KhPZD_Flxg
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+
+    public void activateAccount(String token) throws MessagingException {
+        Token savedToke = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Token not found"));
+        if(LocalDateTime.now().isAfter(savedToke.getExpiresAt())){
+            sendValidationEmail(savedToke.getUser());
+            throw new RuntimeException("Token has expired");
+        }
+        var user = userRepository.findById(savedToke.getUser().getId()).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        user.setEnabled(true);
+        userRepository.save(user);
+        savedToke.setValidatedAt(LocalDateTime.now());
+        tokenRepository.save(savedToke);
     }
 }
