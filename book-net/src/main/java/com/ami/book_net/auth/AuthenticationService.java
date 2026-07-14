@@ -3,6 +3,7 @@ package com.ami.book_net.auth;
 import com.ami.book_net.email.EmailService;
 import com.ami.book_net.email.EmailTemplateName;
 import com.ami.book_net.role.RoleRepository;
+import com.ami.book_net.security.JwtService;
 import com.ami.book_net.user.Token;
 import com.ami.book_net.user.TokenRepository;
 import com.ami.book_net.user.User;
@@ -12,11 +13,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -28,6 +32,8 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @Value("${application.security.mailing.frontend.activation-url}")
     private String activationUrl;
@@ -84,5 +90,22 @@ public class AuthenticationService {
             codeBuilder.append(characters.charAt(random.nextInt(characters.length())));
         }
         return codeBuilder.toString();
+    }
+
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        var auth = authenticationManager.authenticate(
+                //You are taking raw, untrusted user inputs (email and password) and asking Spring Security to verify them.
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+        var claims = new HashMap<String, Object>();
+        var user = ((User) auth.getPrincipal());
+        claims.put("fullname", user.fullName());
+        var jwtToken = jwtService.generateToken(claims, user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }
