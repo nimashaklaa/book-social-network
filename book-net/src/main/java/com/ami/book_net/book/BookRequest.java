@@ -21,6 +21,4 @@ public record BookRequest (
         @NotNull( message = "Shareable status is required")
         @NotEmpty( message = "Shareable status is required")
         boolean shareable
-){
-
-}
+){}
