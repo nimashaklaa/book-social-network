@@ -1,5 +1,6 @@
 package com.ami.book_net.user;
 
+import com.ami.book_net.book.Book;
 import com.ami.book_net.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -45,6 +46,9 @@ public class User implements UserDetails, Principal {
 
     @ManyToMany(fetch = FetchType.EAGER) //fetch roles eagerly when loading a user
     private List<Role> roles;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Book> books;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

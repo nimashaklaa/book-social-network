@@ -1,14 +1,12 @@
-package com.ami.book_net.feedback;
+package com.ami.book_net.history;
 
-import com.ami.book_net.book.Book;
 import com.ami.book_net.common.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 
 @Getter
 @Setter
@@ -16,12 +14,10 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Feedback extends BaseEntity {
+public class BookTransactionHistory extends BaseEntity {
+    //user relationship
+    //book relationship
 
-    private Double rating;
-    private String comment;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
+    private boolean returned;
+    private boolean returnApproved;
 }
