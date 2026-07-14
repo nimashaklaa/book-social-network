@@ -1,6 +1,7 @@
 package com.ami.book_net.book;
 
 import com.ami.book_net.exception.OperationNotPermittedException;
+import com.ami.book_net.file.FileStorageService;
 import com.ami.book_net.history.BookTransactionHistory;
 import com.ami.book_net.history.BookTransactionHistoryRepository;
 import com.ami.book_net.user.User;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +28,7 @@ public class BookService {
     private final BookMapper bookMapper;
     private final BookRepository bookRepository;
     private final BookTransactionHistoryRepository bookTransactionHistoryRepository;
+    private final FileStorageService fileStorageService;
 
     public Integer save(@Valid BookRequest request, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
@@ -143,6 +146,14 @@ public class BookService {
         return bookTransactionHistoryRepository.save(borrowedHistory).getId();
     }
 
+    public void uploadBookCoverPicture(MultipartFile file, Authentication connectedUser, Integer bookId) {
+        Book book = findBookByIdHelper(bookId);
+        User user = (User) connectedUser.getPrincipal();
+        var bookCover = fileStorageService.savefile(file, user.getId());
+        book.setBookCover(bookCover);
+        bookRepository.save(book);
+    }
+
     // --- REUSABLE PRIVATE HELPER METHODS ---
 
     private Book findBookByIdHelper(Integer bookId){
@@ -169,6 +180,7 @@ public class BookService {
             throw new OperationNotPermittedException(exceptionMessage);
         }
     }
+
 
 
 }
