@@ -62,18 +62,25 @@ public class BookController {
         return ResponseEntity.ok(service.findAllReturnedBooksByOwner(page,size,connectedUser));
     }
     @PatchMapping("/shareable/{book-id}")
-    public ResponseEntity<Integer> UpdateBookShareableStatus(
+    public ResponseEntity<Integer> updateBookShareableStatus(
             @PathVariable("book-id") Integer bookId,
             Authentication connectedUser
     ) {
         return ResponseEntity.ok(service.updateBookShareableStatus(bookId,connectedUser));
     }
     @PatchMapping("/archived/{book-id}")
-    public ResponseEntity<Integer> UpdateBookArchivedStatus(
+    public ResponseEntity<Integer> updateBookArchivedStatus(
             @PathVariable("book-id") Integer bookId,
             Authentication connectedUser
     ) {
         return ResponseEntity.ok(service.updateBookArchivedStatus(bookId,connectedUser));
+    }
+    @PostMapping("/borrow/{book-id}")
+    public ResponseEntity<Integer> borrowBook(
+            @PathVariable("book-id") Integer bookId,
+            Authentication connectedUser
+    ){
+        return ResponseEntity.ok(service.borrowBook(bookId,connectedUser));
     }
 
 
