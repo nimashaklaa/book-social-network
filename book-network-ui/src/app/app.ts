@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root', // ← this is the HTML tag name
   imports: [RouterOutlet],
   templateUrl: './app.html', // ← its HTML
-  styleUrl: './app.css'
+  styleUrl: './app.scss'
 })
 //It's metadata that tells Angular "this class is a component"
 export class App {
