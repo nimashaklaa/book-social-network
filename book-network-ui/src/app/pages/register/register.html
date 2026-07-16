@@ -1,39 +1,46 @@
-<div class="container-fluid card login-container">
-  <h3 class="text-center">Create an account</h3>
-  <hr>
-  @if(errorMessage().length > 0) {
-    <div class="alert alert-danger" role="alert">
-      @for(msg of errorMessage(); track msg) {
-        <p class="mb-3" >{{msg}}</p>
-      }
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h3 class="auth-title">Create an account</h3>
+    <p class="auth-subtitle">Join the book social network</p>
+    <hr>
+
+    @if(errorMessage().length > 0) {
+      <div class="alert alert-danger" role="alert">
+        @for(msg of errorMessage(); track msg) {
+          <p class="mb-1">{{msg}}</p>
+        }
+      </div>
+    }
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="firstname" class="form-label">First Name</label>
+        <input [(ngModel)]="registrationRequest.firstname" type="text" class="form-control" id="firstname" placeholder="John">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="lastname" class="form-label">Last Name</label>
+        <input [(ngModel)]="registrationRequest.lastname" type="text" class="form-control" id="lastname" placeholder="Doe">
+      </div>
     </div>
-  }
-  <div class="mb-3">
-    <label for="firstname" class="form-label">First Name</label>
-    <input [(ngModel)]="registrationRequest.firstname" type="text" class="form-control" id="firstname" placeholder="John">
-  </div>
-  <div class="mb-3">
-    <label for="lastname" class="form-label">Last Name</label>
-    <input [(ngModel)]="registrationRequest.lastname" type="text" class="form-control" id="lastname" placeholder="Doe">
-  </div>
-  <div class="mb-3">
-    <label for="login" class="form-label">Email address</label>
-    <input [(ngModel)]="registrationRequest.email" type="email" class="form-control" id="login" placeholder="name@example.com">
-  </div>
-  <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
-    <input [(ngModel)]="registrationRequest.password" type="password" class="form-control" id="password" placeholder="Password">
-  </div>
-  <div class="d-flex justify-content-between mb-3">
-    <button (click)="register()"  class="btn btn-primary" type="button">
-      <em class="fas fa-sign-in-alt"></em>
-      &nbsp;Sign up
-    </button>
-    <div>
-      Already have an account?&nbsp;
-      <button (click)="login()" class="btn btn-link" type="button">
-        Log in
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input [(ngModel)]="registrationRequest.email" type="email" class="form-control" id="email" placeholder="name@example.com">
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input [(ngModel)]="registrationRequest.password" type="password" class="form-control" id="password" placeholder="Password">
+    </div>
+
+    <div class="d-grid mb-3">
+      <button (click)="register()" class="btn btn-primary btn-lg" type="button">
+        <em class="fas fa-user-plus"></em>&nbsp;Sign up
       </button>
     </div>
+
+    <p class="text-center text-muted mb-0">
+      Already have an account?
+      <button (click)="login()" class="btn btn-link p-0">Log in</button>
+    </p>
   </div>
 </div>

@@ -13,7 +13,7 @@ import {AuthenticationResponse} from '../../services/models/authentication-respo
     FormsModule
   ],
   templateUrl: './register.html',
-  styleUrl: './register.css',
+  styleUrl: './register.scss',
 })
 export class Register {
   registrationRequest: RegistrationRequest ={
