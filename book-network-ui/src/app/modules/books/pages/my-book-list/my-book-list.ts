@@ -13,7 +13,8 @@ import {
   saveBook,
   updateBook,
   updateBookArchivedStatus,
-  updateBookShareableStatus
+  updateBookShareableStatus,
+  uploadBookCover
 } from '../../../../services/functions';
 
 @Component({
@@ -131,7 +132,21 @@ export class MyBookList extends BasePage implements OnInit {
     })
   }
 
-  protected updateCoverPicture() {}
+  protected updateCoverPicture(bookId: number, cover:Blob) {
+    uploadBookCover(this.http, this.apiConfig.rootUrl,{
+      'book-id': bookId,
+      body: {
+        file:cover
+      }
+    }).subscribe({
+      next: () => {
+        this.loadData();
+      },
+      error: (err) => {
+        this.handleError(err)
+      }
+    })
+  }
 
 
 

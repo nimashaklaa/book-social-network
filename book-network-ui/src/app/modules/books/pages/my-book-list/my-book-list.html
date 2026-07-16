@@ -86,9 +86,11 @@
                 <button class="btn btn-sm btn-outline-warning" title="Toggle Archived" (click)="updateBookArchivedState(book.id!)" >
                   <i class="fas fa-archive"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-success" title="Upload Cover" (click)="updateCoverPicture()">
+                <button class="btn btn-sm btn-outline-success" title="Upload Cover" (click)="coverInput.click()">
                   <i class="fas fa-image"></i>
                 </button>
+                <input #coverInput type="file" accept="image/*" hidden
+                       (change)="updateCoverPicture(book.id!, $any($event.target).files[0])">
               </div>
             </td>
           </tr>
