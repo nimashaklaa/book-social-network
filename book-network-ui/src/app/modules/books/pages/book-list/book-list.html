@@ -1,7 +1,47 @@
-<h3> Books List</h3>
-<hr>
-<div class="d-flex  justify-content-start gap-2 flex-wrap">
-  @for(book of books(); track book) {
-    <span class="badge bg-primary">{{book.title}}</span>
+@if(errorMessage().length > 0) {
+  <div class="alert alert-danger m-3">
+    @for(msg of errorMessage(); track msg) {
+      <p class="mb-1">{{ msg }}</p>
+    }
+  </div>
+}
+
+<div class="book-list-page">
+  <div class="d-flex justify-content-start gap-3 flex-wrap">
+    @for(book of books(); track book.id) {
+      <app-book-card [book]="book" />
+    }
+
+    @if(books().length === 0) {
+      <div class="text-center w-100 py-5 text-muted">
+        <i class="fas fa-book-open fa-3x mb-3"></i>
+        <p>No books found.</p>
+      </div>
+    }
+  </div>
+
+  <!-- Pagination -->
+  @if(totalPages > 1) {
+    <nav class="mt-4 d-flex justify-content-center">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="isFirst()">
+          <button class="page-link" (click)="goToPreviousPage()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        </li>
+
+        @for(_p of [].constructor(totalPages); track $index) {
+          <li class="page-item" [class.active]="$index === page">
+            <button class="page-link" (click)="goToPage($index)">{{ $index + 1 }}</button>
+          </li>
+        }
+
+        <li class="page-item" [class.disabled]="isLast()">
+          <button class="page-link" (click)="goToNextPage()">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
   }
 </div>

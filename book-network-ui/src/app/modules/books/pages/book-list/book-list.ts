@@ -3,12 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration } from '../../../../services/api-configuration';
 import { BookResponse } from '../../../../services/models/book-response';
 import { PageResponseBookResponse } from '../../../../services/models/page-response-book-response';
+import {BookCard} from '../../components/book-card/book-card';
 
 @Component({
   selector: 'app-book-list',
-  imports: [],
+  imports: [
+    BookCard
+  ],
   templateUrl: './book-list.html',
-  styleUrl: './book-list.css',
+  styleUrl: './book-list.scss',
 })
 export class BookList implements OnInit {
   private http = inject(HttpClient);
