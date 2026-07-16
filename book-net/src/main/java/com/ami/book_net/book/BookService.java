@@ -60,7 +60,8 @@ public class BookService {
         List<BookResponse> bookResponse = books.stream()
                 .map(book->{
                     BookResponse response = bookMapper.toBookResponse(book);
-                    response.setBorrowed(bookTransactionHistoryRepository.isAlreadyBorrowed(book.getId(), user.getId()));
+                    response.setBorrowedByCurrentUser(bookTransactionHistoryRepository.isAlreadyBorrowed(book.getId(), user.getId()));
+                    response.setBorrowedByAnotherUser(bookTransactionHistoryRepository.isCurrentlyBorrowed(book.getId()));
                     return response;
                 })
                 .toList();

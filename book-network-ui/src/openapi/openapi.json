@@ -872,7 +872,10 @@
                     "shareable": {
                         "type": "boolean"
                     },
-                    "borrowed": {
+                    "borrowedByCurrentUser": {
+                        "type": "boolean"
+                    },
+                    "borrowedByAnotherUser": {
                         "type": "boolean"
                     },
                     "owner": {

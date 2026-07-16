@@ -4,7 +4,8 @@
 export interface BookResponse {
   archived?: boolean;
   authorName?: string;
-  borrowed?: boolean;
+  borrowedByAnotherUser?: boolean;
+  borrowedByCurrentUser?: boolean;
   cover?: string;
   id?: number;
   isbn?: string;

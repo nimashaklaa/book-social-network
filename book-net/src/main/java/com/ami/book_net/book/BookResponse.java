@@ -17,6 +17,7 @@ public class BookResponse {
     private double rate;
     private boolean archived;
     private boolean shareable;
-    private boolean borrowed;
+    private boolean borrowedByCurrentUser;
+    private boolean borrowedByAnotherUser;
     private String owner;
 }
