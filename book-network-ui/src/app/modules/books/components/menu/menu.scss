@@ -1,0 +1,82 @@
+.app-navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  padding: 0.75rem 1.5rem;
+
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #fff;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  .nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-weight: 500;
+    padding: 0.5rem 0.85rem;
+    border-radius: 0.4rem;
+    transition: background 0.2s ease;
+
+    &:hover {
+      color: #fff !important;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    &.active {
+      color: #fff !important;
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  .form-control {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 2rem;
+    padding: 0.4rem 1rem;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    &:focus {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.6);
+      color: #fff;
+      box-shadow: none;
+    }
+  }
+
+  .btn-outline-success {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+    border-radius: 2rem;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #fff;
+      color: #fff;
+    }
+  }
+
+  .btn-link {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  span {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .fw-bold {
+    color: #fff;
+  }
+}
