@@ -306,6 +306,48 @@
                 }
             }
         },
+        "/books/update/{book-id}": {
+            "patch": {
+                "tags": [
+                    "Books"
+                ],
+                "operationId": "updateBook",
+                "parameters": [
+                    {
+                        "name": "book-id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BookRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/books/shareable/{book-id}": {
             "patch": {
                 "tags": [

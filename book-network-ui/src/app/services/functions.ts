@@ -15,6 +15,8 @@ export type { BorrowBook$Params as BorrowBook$Params } from './fn/books/borrow-b
 export { borrowBook as borrowBook } from './fn/books/borrow-book';
 export type { ReturnBorrowBook$Params as ReturnBorrowBook$Params } from './fn/books/return-borrow-book';
 export { returnBorrowBook as returnBorrowBook } from './fn/books/return-borrow-book';
+export type { UpdateBook$Params as UpdateBook$Params } from './fn/books/update-book';
+export { updateBook as updateBook } from './fn/books/update-book';
 export type { UpdateBookShareableStatus$Params as UpdateBookShareableStatus$Params } from './fn/books/update-book-shareable-status';
 export { updateBookShareableStatus as updateBookShareableStatus } from './fn/books/update-book-shareable-status';
 export type { UpdateBookArchivedStatus$Params as UpdateBookArchivedStatus$Params } from './fn/books/update-book-archived-status';

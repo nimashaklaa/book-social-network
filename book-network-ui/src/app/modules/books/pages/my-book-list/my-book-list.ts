@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import {DecimalPipe, NgClass} from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration } from '../../../../services/api-configuration';
 import { BookResponse } from '../../../../services/models/book-response';
@@ -11,7 +11,7 @@ import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-my-book-list',
-  imports: [DecimalPipe, Pagination, FormsModule],
+  imports: [DecimalPipe, Pagination, FormsModule, NgClass],
   templateUrl: './my-book-list.html',
   styleUrl: './my-book-list.scss',
 })
@@ -22,14 +22,9 @@ export class MyBookList extends BasePage implements OnInit {
   books = signal<Array<BookResponse>>([]);
   errorMessage = signal<Array<string>>([]);
   isDrawerOpen = signal<boolean>(false);
+  isEditModeEnable = signal<boolean>(false);
 
-  newBook: BookRequest ={
-    title: '',
-    authorName: '',
-    isbn: '',
-    synopsis: '',
-    shareable: true
-  }
+  newBook: BookRequest = this.getEmptyBook()
 
   ngOnInit() {
     this.loadData();
@@ -51,37 +46,57 @@ export class MyBookList extends BasePage implements OnInit {
     });
   }
   protected addNewBook() {
-    this.resetForm();
+    if(this.isEditModeEnable) {
+      this.isEditModeEnable.set(false);
+    }
+    this.getEmptyBook();
     this.isDrawerOpen.set(true);
   }
   protected closeDrawer() {
     this.isDrawerOpen.set(false);
   }
 
-  protected submitNewBook() {
-    this.http.post<number>(
-      `${this.apiConfig.rootUrl}/books`,
-      this.newBook
-    ).subscribe({
-      next: () => {
-        this.closeDrawer();
-        this.resetForm();
-        this.loadData();
-      },
-      error: (err) => {
-        this.handleError(err)
-      }
-    });
+  protected saveBook() {
+    if (this.isEditModeEnable()) {
+      // this.updateBookDetailsAndSave()
+    }else{
+      this.http.post<number>(
+        `${this.apiConfig.rootUrl}/books`,
+        this.newBook
+      ).subscribe({
+        next: () => {
+          this.closeDrawer();
+          this.getEmptyBook();
+          this.loadData();
+        },
+        error: (err) => {
+          this.handleError(err)
+        }
+      });
+    }
+
   }
 
-  protected updateBookDetails() {}
+  protected updateBookDetails(book: BookResponse) {
+    this.isEditModeEnable.set(true);
+    this.newBook={
+      title: book.title ||'',
+      authorName: book.authorName || '',
+      isbn: book.isbn || '',
+      synopsis: book.synopsis || '',
+      shareable: book.shareable|| true,
+    };
+    this.isDrawerOpen.set(true);
+  }
+
   protected updateBookShareableStatus() {}
   protected updateBookArchivedStatus() {}
   protected updateCoverPicture() {}
 
 
-  private resetForm() {
-    this.newBook = {
+
+  private getEmptyBook():BookRequest{
+    return{
       title: '',
       authorName: '',
       isbn: '',
@@ -89,8 +104,11 @@ export class MyBookList extends BasePage implements OnInit {
       shareable: true,
     }
   }
+
   private handleError(err: any) {
     const body = typeof err.error === 'string' ? JSON.parse(err.error) : err.error;
     this.errorMessage.set(body?.validationErrors ?? (body?.error ? [body.error] : ['An error occurred']));
   }
+
+
 }

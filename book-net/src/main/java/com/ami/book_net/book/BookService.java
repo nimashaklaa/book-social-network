@@ -36,6 +36,18 @@ public class BookService {
         book.setOwner(user);
         return bookRepository.save(book).getId();
     }
+    public Integer updateBookDetails(Integer bookId, @Valid BookRequest request, Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        Book book = findBookByIdHelper(bookId);
+        validateUserIsNotOwner(book, user, "You cannot update others books shareable status");
+        book.setTitle(request.title());
+        book.setAuthorName(request.authorName());
+        book.setIsbn(request.isbn());
+        book.setSynopsis(request.synopsis());
+        book.setShareable(request.shareable());
+        bookRepository.save(book);
+        return bookId;
+    }
 
     public BookResponse findBookById(Integer bookId) {
         return bookMapper.toBookResponse(findBookByIdHelper(bookId));
@@ -176,7 +188,7 @@ public class BookService {
         }
     }
     private void validateUserIsNotOwner(Book book, User user, String exceptionMessage) {
-        if (Objects.equals(book.getOwner().getId(), user.getId())) {
+        if (!Objects.equals(book.getOwner().getId(), user.getId())) {
             throw new OperationNotPermittedException(exceptionMessage);
         }
     }
