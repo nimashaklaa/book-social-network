@@ -41,6 +41,7 @@ export class MyBookList extends BasePage implements OnInit {
       { params: { page: this.page, size: this.size } }
     ).subscribe({
       next: (response) => {
+        console.log("response", response);
         this.books.set(response.content ?? []);
         this.setPageData(response.first ?? true, response.last ?? false, response.totalPages ?? 0);
       },
