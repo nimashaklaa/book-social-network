@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationRequest } from '../../services/models/authentication-request';
 import { AuthenticationResponse } from '../../services/models/authentication-response';
 import { ApiConfiguration } from '../../services/api-configuration';
+import {Token} from '../../services/token/token';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class Login {
   private router = inject(Router);
   private http = inject(HttpClient);
   private apiConfig = inject(ApiConfiguration);
+  private tokenService = inject(Token)
 
   protected login() {
     this.errorMessage.set([]);
@@ -28,7 +30,7 @@ export class Login {
       this.autheRequest
     ).subscribe({
       next: async (response) => {
-        localStorage.setItem('token', response.token as string);
+        this.tokenService.token = response.token as string;
         await this.router.navigate(['/books']);
       },
       error: (err) => {
