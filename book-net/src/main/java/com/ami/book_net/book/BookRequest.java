@@ -19,6 +19,5 @@ public record BookRequest (
         @NotEmpty( message = "Synopsis is required")
         String synopsis,
         @NotNull( message = "Shareable status is required")
-        @NotEmpty( message = "Shareable status is required")
         boolean shareable
 ){}
