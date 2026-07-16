@@ -58,7 +58,11 @@ public class BookService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
         Page<Book> books = bookRepository.findAllDisplayableBooks(pageable, user.getId());
         List<BookResponse> bookResponse = books.stream()
-                .map(bookMapper::toBookResponse)
+                .map(book->{
+                    BookResponse response = bookMapper.toBookResponse(book);
+                    response.setBorrowed(bookTransactionHistoryRepository.isAlreadyBorrowed(book.getId(), user.getId()));
+                    return response;
+                })
                 .toList();
         return toPageResponse(books, bookResponse);
     }
@@ -114,8 +118,8 @@ public class BookService {
     public Integer borrowBook(Integer bookId, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
         Book book = findBookByIdHelper(bookId);
-        if(!book.isArchived() || !book.isShareable()){
-            throw new OperationNotPermittedException("You cannot borrow this book because it is not available");
+        if(book.isArchived() || !book.isShareable()){
+            throw new OperationNotPermittedException("You cannot borrow this book because it is not available" );
         }
         validateUserIsOwner(book, user);
         final boolean isAlreadyBorrowed = bookTransactionHistoryRepository.isAlreadyBorrowed(bookId, user.getId());

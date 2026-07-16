@@ -1,1 +1,87 @@
-<p>my-returned-books works!</p>
+@if(errorMessage().length > 0) {
+  <div class="alert alert-danger m-3">
+    @for(msg of errorMessage(); track msg) {
+      <p class="mb-1">{{ msg }}</p>
+    }
+  </div>
+}
+
+<div class="p-4">
+  <div class="d-flex align-items-center mb-3">
+    <h4 class="mb-0"><i class="fas fa-undo me-2"></i>Returned Books</h4>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Rate</th>
+          <th>Returned</th>
+          <th>Return Approved</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if(books().length === 0) {
+          <tr>
+            <td colspan="8" class="text-center py-5 text-muted">
+              <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+              No returned books yet.
+            </td>
+          </tr>
+        }
+
+        @for(book of books(); track book.id; let i = $index) {
+          <tr>
+            <td class="text-muted small">{{ page * size + i + 1 }}</td>
+            <td class="fw-semibold">{{ book.title }}</td>
+            <td class="text-muted">{{ book.authorName }}</td>
+            <td class="text-muted small font-monospace">{{ book.isbn }}</td>
+            <td>
+              <span class="badge bg-warning text-dark">
+                <i class="fas fa-star me-1"></i>{{ book.rate ?? 0 | number:'1.1-1' }}
+              </span>
+            </td>
+            <td>
+              @if(book.returned) {
+                <span class="badge bg-success">Yes</span>
+              } @else {
+                <span class="badge bg-secondary">No</span>
+              }
+            </td>
+            <td>
+              @if(book.returnApproved) {
+                <span class="badge bg-success">Approved</span>
+              } @else {
+                <span class="badge bg-warning text-dark">Pending</span>
+              }
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-outline-success"
+                title="Approve Return"
+                [disabled]="book.returnApproved"
+                (click)="approveReturn(book.id!)">
+                <i class="fas fa-check me-1"></i>Approve
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <app-pagination
+    [totalPages]="totalPages"
+    [currentPage]="page"
+    [isFirst]="isFirst()"
+    [isLast]="isLast()"
+    (previous)="goToPreviousPage()"
+    (next)="goToNextPage()"
+    (pageChange)="goToPage($event)"
+  />
+</div>

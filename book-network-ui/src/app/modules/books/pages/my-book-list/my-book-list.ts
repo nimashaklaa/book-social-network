@@ -24,8 +24,10 @@ import {
   styleUrl: './my-book-list.scss',
 })
 export class MyBookList extends BasePage implements OnInit {
+
   private http = inject(HttpClient);
   private apiConfig = inject(ApiConfiguration);
+
 
   books = signal<Array<BookResponse>>([]);
   errorMessage = signal<Array<string>>([]);
