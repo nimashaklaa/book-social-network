@@ -29,3 +29,107 @@
     vertical-align: middle;
   }
 }
+
+// Backdrop overlay
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1044; // just below Bootstrap offcanvas z-index (1045)
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+// Offcanvas drawer overrides
+.offcanvas {
+  width: 420px;
+  z-index: 1045;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.18);
+  transition: transform 0.3s ease, visibility 0.3s ease;
+
+  .offcanvas-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1.25rem 1.5rem;
+
+    .offcanvas-title {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+  }
+
+  .offcanvas-body {
+    padding: 1.75rem 1.5rem;
+    overflow-y: auto;
+
+    .form-label {
+      font-size: 0.85rem;
+      color: #374151;
+      margin-bottom: 0.35rem;
+    }
+
+    .form-control,
+    textarea.form-control {
+      border-radius: 8px;
+      border: 1.5px solid #d1d5db;
+      font-size: 0.9rem;
+      padding: 0.5rem 0.75rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+      &:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+      }
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-check-input {
+      width: 2.5em;
+      height: 1.25em;
+      cursor: pointer;
+
+      &:checked {
+        background-color: #667eea;
+        border-color: #667eea;
+      }
+    }
+
+    .form-switch .form-check-input-label {
+      font-size: 0.875rem;
+      color: #374151;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 0.6rem;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+
+      &:hover:not(:disabled) {
+        opacity: 0.92;
+        transform: translateY(-1px);
+      }
+
+      &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+    }
+
+    .btn-outline-secondary {
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+  }
+}

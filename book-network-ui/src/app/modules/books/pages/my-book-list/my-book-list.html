@@ -9,7 +9,7 @@
 <div class="p-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0"><i class="fas fa-book me-2"></i>My Books</h4>
-    <button class="btn btn-primary btn-sm">
+    <button class="btn btn-primary btn-sm" (click)="addNewBook()">
       <i class="fas fa-plus me-1"></i>Add New Book
     </button>
   </div>
@@ -106,4 +106,56 @@
     (next)="goToNextPage()"
     (pageChange)="goToPage($event)"
   />
+</div>
+
+@if(isDrawerOpen()) {
+  <div class="drawer-backdrop" (click)="closeDrawer()"></div>
+}
+
+<div class="offcanvas offcanvas-end"
+     [class.show]="isDrawerOpen()"
+     [style.visibility]="isDrawerOpen() ? 'visible' : 'hidden'"
+     tabindex="-1"
+     aria-labelledby="addBookDrawerLabel">
+  <div class="offcanvas-header bg-dark text-white">
+    <h5 class="offcanvas-title" id="addBookDrawerLabel">
+      <i class="fas fa-plus-circle me-2"></i>Add New Book
+    </h5>
+    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="closeDrawer()"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form (ngSubmit)="submitNewBook()"  #bookForm="ngForm">
+      <div class="mb-3">
+        <label for="bookTitle" class="form-label fw-semibold">Title</label>
+        <input type="text" id="bookTitle" name="title" [(ngModel)]="newBook.title" class="form-control" required placeholder="e.g. Clean Code">
+      </div>
+
+      <div class="mb-3">
+        <label for="authorName" class="form-label fw-semibold">Author</label>
+        <input type="text" id="authorName" name="authorName" [(ngModel)]="newBook.authorName" class="form-control" required placeholder="e.g. Robert C. Martin">
+      </div>
+
+      <div class="mb-3">
+        <label for="isbn" class="form-label fw-semibold">ISBN</label>
+        <input type="text" id="isbn" name="isbn" [(ngModel)]="newBook.isbn" class="form-control" required placeholder="e.g. 978-0132350884">
+      </div>
+
+      <div class="mb-3">
+        <label for="synopsis" class="form-label fw-semibold">Synopsis</label>
+        <textarea id="synopsis" name="synopsis" [(ngModel)]="newBook.synopsis" class="form-control" rows="4" placeholder="Brief summary of the book..."></textarea>
+      </div>
+
+      <div class="mb-3 form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="shareable" name="shareable" [(ngModel)]="newBook.shareable">
+        <label class="form-check-input-label fw-semibold ms-2" for="shareable">Allow this book to be shared</label>
+      </div>
+
+      <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-primary" [disabled]="!bookForm.form.valid">
+          <i class="fas fa-save me-1"></i> Save Book
+        </button>
+        <button type="button" class="btn btn-outline-secondary" (click)="closeDrawer()">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>
