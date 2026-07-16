@@ -46,10 +46,10 @@ export class MyBookList extends BasePage implements OnInit {
     });
   }
   protected addNewBook() {
-    if(this.isEditModeEnable) {
+    if(this.isEditModeEnable()) {
       this.isEditModeEnable.set(false);
     }
-    this.getEmptyBook();
+    this.newBook = this.getEmptyBook();
     this.isDrawerOpen.set(true);
   }
   protected closeDrawer() {
@@ -58,15 +58,25 @@ export class MyBookList extends BasePage implements OnInit {
 
   protected saveBook() {
     if (this.isEditModeEnable()) {
-      // this.updateBookDetailsAndSave()
-    }else{
+      this.http.put(`${this.apiConfig.rootUrl}/books/update/${this.newBook.id}`, this.newBook
+      ).subscribe({
+        next: () => {
+          this.closeDrawer();
+          this.newBook = this.getEmptyBook();
+          this.loadData();
+        },
+        error: (err) => {
+          this.handleError(err)
+        }
+    })}
+    else{
       this.http.post<number>(
         `${this.apiConfig.rootUrl}/books`,
         this.newBook
       ).subscribe({
         next: () => {
           this.closeDrawer();
-          this.getEmptyBook();
+          this.newBook = this.getEmptyBook();
           this.loadData();
         },
         error: (err) => {
@@ -80,11 +90,12 @@ export class MyBookList extends BasePage implements OnInit {
   protected updateBookDetails(book: BookResponse) {
     this.isEditModeEnable.set(true);
     this.newBook={
+      id: book.id,
       title: book.title ||'',
       authorName: book.authorName || '',
       isbn: book.isbn || '',
       synopsis: book.synopsis || '',
-      shareable: book.shareable|| true,
+      shareable: book.shareable ?? true,
     };
     this.isDrawerOpen.set(true);
   }

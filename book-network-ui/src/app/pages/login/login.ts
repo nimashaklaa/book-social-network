@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationRequest } from '../../services/models/authentication-request';
 import { AuthenticationResponse } from '../../services/models/authentication-response';
 import { ApiConfiguration } from '../../services/api-configuration';
-import {Token} from '../../services/token/token';
+import { Token } from '../../core/token';
 
 @Component({
   selector: 'app-login',
