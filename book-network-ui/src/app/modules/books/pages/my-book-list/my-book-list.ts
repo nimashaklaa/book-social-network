@@ -62,7 +62,7 @@ export class MyBookList extends BasePage implements OnInit {
       `${this.apiConfig.rootUrl}/books`,
       this.newBook
     ).subscribe({
-      next: (response) => {
+      next: () => {
         this.closeDrawer();
         this.resetForm();
         this.loadData();
