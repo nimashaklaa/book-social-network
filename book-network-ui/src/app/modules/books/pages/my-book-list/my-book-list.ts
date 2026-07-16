@@ -8,6 +8,13 @@ import { Pagination } from '../../components/pagination/pagination';
 import { BasePage } from '../base-page';
 import {BookRequest} from '../../../../services/models/book-request';
 import {FormsModule} from '@angular/forms';
+import {
+  findAllBooksByBooks,
+  saveBook,
+  updateBook,
+  updateBookArchivedStatus,
+  updateBookShareableStatus
+} from '../../../../services/functions';
 
 @Component({
   selector: 'app-my-book-list',
@@ -31,14 +38,12 @@ export class MyBookList extends BasePage implements OnInit {
   }
 
   protected loadData() {
-    this.http.get<PageResponseBookResponse>(
-      `${this.apiConfig.rootUrl}/books/owner`,
-      { params: { page: this.page, size: this.size } }
+    findAllBooksByBooks(this.http, this.apiConfig.rootUrl, { page: this.page, size: this.size }
     ).subscribe({
       next: (response) => {
-        console.log("response", response);
-        this.books.set(response.content ?? []);
-        this.setPageData(response.first ?? true, response.last ?? false, response.totalPages ?? 0);
+        const pageData = response.body as PageResponseBookResponse;
+        this.books.set(pageData?.content ?? []);
+        this.setPageData(pageData?.first ?? true, pageData?.last ?? false, pageData?.totalPages ?? 0);
       },
       error: (err) => {
         this.handleError(err)
@@ -56,10 +61,12 @@ export class MyBookList extends BasePage implements OnInit {
     this.isDrawerOpen.set(false);
   }
 
-  protected saveBook() {
+  protected saveTheBook() {
     if (this.isEditModeEnable()) {
-      this.http.put(`${this.apiConfig.rootUrl}/books/update/${this.newBook.id}`, this.newBook
-      ).subscribe({
+      updateBook(this.http, this.apiConfig.rootUrl,{
+        'book-id':this.newBook.id!,
+        body: this.newBook
+      }).subscribe({
         next: () => {
           this.closeDrawer();
           this.newBook = this.getEmptyBook();
@@ -70,10 +77,9 @@ export class MyBookList extends BasePage implements OnInit {
         }
     })}
     else{
-      this.http.post<number>(
-        `${this.apiConfig.rootUrl}/books`,
-        this.newBook
-      ).subscribe({
+      saveBook(this.http, this.apiConfig.rootUrl,{
+        body: this.newBook
+      }).subscribe({
         next: () => {
           this.closeDrawer();
           this.newBook = this.getEmptyBook();
@@ -100,8 +106,31 @@ export class MyBookList extends BasePage implements OnInit {
     this.isDrawerOpen.set(true);
   }
 
-  protected updateBookShareableStatus() {}
-  protected updateBookArchivedStatus() {}
+  protected updateBookShareableState(bookId: number) {
+    updateBookShareableStatus(this.http, this.apiConfig.rootUrl,{
+      'book-id': bookId,
+    }).subscribe({
+      next: () => {
+        this.loadData();
+      },
+      error: (err) => {
+        this.handleError(err)
+      }
+    })
+  }
+  protected updateBookArchivedState(bookId: number) {
+    updateBookArchivedStatus(this.http, this.apiConfig.rootUrl,{
+      'book-id': bookId,
+    }).subscribe({
+      next: () => {
+        this.loadData();
+      },
+      error: (err) => {
+        this.handleError(err)
+      }
+    })
+  }
+
   protected updateCoverPicture() {}
 
 

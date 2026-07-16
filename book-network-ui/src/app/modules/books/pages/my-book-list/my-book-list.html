@@ -80,10 +80,10 @@
                 <button class="btn btn-sm btn-outline-primary" title="Edit" (click)="updateBookDetails(book)">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-secondary" title="Toggle Shareable" (click)="updateBookShareableStatus()">
+                <button class="btn btn-sm btn-outline-secondary" title="Toggle Shareable" (click)="updateBookShareableState(book.id!)">
                   <i class="fas fa-share-alt"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-warning" title="Toggle Archived" (click)="updateBookArchivedStatus()" )>
+                <button class="btn btn-sm btn-outline-warning" title="Toggle Archived" (click)="updateBookArchivedState(book.id!)" >
                   <i class="fas fa-archive"></i>
                 </button>
                 <button class="btn btn-sm btn-outline-success" title="Upload Cover" (click)="updateCoverPicture()">
@@ -125,7 +125,7 @@
     <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="closeDrawer()"></button>
   </div>
   <div class="offcanvas-body">
-    <form (ngSubmit)="saveBook()"  #bookForm="ngForm">
+    <form (ngSubmit)="saveTheBook()"  #bookForm="ngForm">
       <div class="mb-3">
         <label for="bookTitle" class="form-label fw-semibold">Title</label>
         <input type="text" id="bookTitle" name="title" [(ngModel)]="newBook.title" class="form-control" required placeholder="e.g. Clean Code">
