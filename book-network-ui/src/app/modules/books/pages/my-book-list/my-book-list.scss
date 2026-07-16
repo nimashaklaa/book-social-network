@@ -1,0 +1,31 @@
+.book-thumb {
+  width: 48px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.book-thumb-placeholder {
+  width: 48px;
+  height: 60px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.2rem;
+}
+
+.table {
+  th {
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  td {
+    font-size: 0.9rem;
+    vertical-align: middle;
+  }
+}

@@ -1,0 +1,23 @@
+@if(totalPages() > 1) {
+  <nav class="mt-4 d-flex justify-content-center">
+    <ul class="pagination pagination-sm">
+      <li class="page-item" [class.disabled]="isFirst()">
+        <button class="page-link" (click)="previous.emit()">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+      </li>
+
+      @for(p of pages(); track p) {
+        <li class="page-item" [class.active]="p === currentPage()">
+          <button class="page-link" (click)="pageChange.emit(p)">{{ p + 1 }}</button>
+        </li>
+      }
+
+      <li class="page-item" [class.disabled]="isLast()">
+        <button class="page-link" (click)="next.emit()">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </li>
+    </ul>
+  </nav>
+}

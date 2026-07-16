@@ -22,28 +22,13 @@
     }
   </div>
 
-  <!-- Pagination -->
-  @if(totalPages > 1) {
-    <nav class="mt-4 d-flex justify-content-center">
-      <ul class="pagination">
-        <li class="page-item" [class.disabled]="isFirst()">
-          <button class="page-link" (click)="goToPreviousPage()">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-        </li>
-
-        @for(_p of [].constructor(totalPages); track $index) {
-          <li class="page-item" [class.active]="$index === page">
-            <button class="page-link" (click)="goToPage($index)">{{ $index + 1 }}</button>
-          </li>
-        }
-
-        <li class="page-item" [class.disabled]="isLast()">
-          <button class="page-link" (click)="goToNextPage()">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </li>
-      </ul>
-    </nav>
-  }
+  <app-pagination
+    [totalPages]="totalPages"
+    [currentPage]="page"
+    [isFirst]="isFirst()"
+    [isLast]="isLast()"
+    (previous)="goToPreviousPage()"
+    (next)="goToNextPage()"
+    (pageChange)="goToPage($event)"
+  />
 </div>
