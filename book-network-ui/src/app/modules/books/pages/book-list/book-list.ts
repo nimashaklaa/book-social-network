@@ -23,7 +23,7 @@ export class BookList implements OnInit {
   isLast = signal<boolean>(false);
 
   page = 0;
-  size = 5;
+  size = 4;
   totalPages = 0;
 
   ngOnInit() {
