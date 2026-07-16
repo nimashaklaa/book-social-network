@@ -24,4 +24,8 @@ export class ActivateAccount {
   protected onCodeCompleted(token: string) {
 
   }
+
+  protected async redirectedToLogin() {
+    await this.router.navigate(['/login']);
+  }
 }
