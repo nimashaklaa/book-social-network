@@ -3,10 +3,13 @@
 
 export interface BorrowedBookResponse {
   authorName?: string;
+  borrowedDate?: string;
+  borrower?: string;
   id?: number;
   isbn?: string;
   rate?: number;
   returnApproved?: boolean;
   returned?: boolean;
+  returnedDate?: string;
   title?: string;
 }

@@ -40,6 +40,9 @@ public class BookMapper {
                 .authorName(history.getBook().getAuthorName())
                 .isbn(history.getBook().getIsbn())
                 .rate(history.getBook().getRate())
+                .borrower(history.getUser().getEmail())
+                .borrowedDate(history.getCreatedDate())
+                .returnedDate(history.getReturnDate())
                 .returned(history.isReturned())
                 .returnApproved(history.isReturnApproved())
                 .build();

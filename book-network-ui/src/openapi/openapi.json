@@ -936,11 +936,22 @@
                         "type": "number",
                         "format": "double"
                     },
+                    "borrower": {
+                        "type": "string"
+                    },
                     "returned": {
                         "type": "boolean"
                     },
                     "returnApproved": {
                         "type": "boolean"
+                    },
+                    "borrowedDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "returnedDate": {
+                        "type": "string",
+                        "format": "date-time"
                     }
                 }
             },

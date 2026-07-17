@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -149,6 +150,7 @@ public class BookService {
         validateUserIsOwner(book, user);
         BookTransactionHistory borrowedHistory = bookTransactionHistoryRepository.findBookByUserIdAndBookId(bookId, user.getId()).orElseThrow(()-> new OperationNotPermittedException("You cannot return this book because you did not borrow it"));
         borrowedHistory.setReturned(true);
+        borrowedHistory.setReturnDate(LocalDateTime.now());
         return bookTransactionHistoryRepository.save(borrowedHistory).getId();
     }
     public Integer approveReturnBook(Integer bookId, Authentication connectedUser) {

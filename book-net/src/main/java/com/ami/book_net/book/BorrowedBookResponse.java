@@ -2,6 +2,8 @@ package com.ami.book_net.book;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,6 +15,9 @@ public class BorrowedBookResponse {
     private String authorName;
     private String isbn;
     private double rate;
+    private String borrower;
     private boolean returned;
     private boolean returnApproved;
+    private LocalDateTime borrowedDate;
+    private LocalDateTime returnedDate;
 }

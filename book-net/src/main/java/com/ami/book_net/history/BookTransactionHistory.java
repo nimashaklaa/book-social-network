@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -26,6 +28,8 @@ public class BookTransactionHistory extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
+
+    private LocalDateTime returnDate;
 
     private boolean returned;
     private boolean returnApproved;
