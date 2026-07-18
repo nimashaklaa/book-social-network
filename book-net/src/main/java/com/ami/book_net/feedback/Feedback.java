@@ -2,6 +2,7 @@ package com.ami.book_net.feedback;
 
 import com.ami.book_net.book.Book;
 import com.ami.book_net.common.BaseEntity;
+import com.ami.book_net.history.BookTransactionHistory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,4 +25,8 @@ public class Feedback extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
+
+    @OneToOne
+    @JoinColumn(name = "history_id")
+    private BookTransactionHistory history;
 }

@@ -144,7 +144,7 @@ public class BookService {
     public Integer returnBorrowBook(Integer bookId, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
         Book book = findBookByIdHelper(bookId);
-        if(!book.isArchived() || !book.isShareable()){
+        if(book.isArchived() || !book.isShareable()){
             throw new OperationNotPermittedException("You cannot borrow this book because it is not available");
         }
         validateUserIsOwner(book, user);
@@ -156,11 +156,11 @@ public class BookService {
     public Integer approveReturnBook(Integer bookId, Authentication connectedUser) {
         User user = (User) connectedUser.getPrincipal();
         Book book = findBookByIdHelper(bookId);
-        if(!book.isArchived() || !book.isShareable()){
-            throw new OperationNotPermittedException("You cannot borrow this book because it is not available");
+        if(book.isArchived() || !book.isShareable()){
+            throw new OperationNotPermittedException("You are not able to perform this task because it is not available");
         }
-        validateUserIsOwner(book, user);
-        BookTransactionHistory borrowedHistory = bookTransactionHistoryRepository.findBookByOwnerIdAndBookId(bookId, user.getId()).orElseThrow(()-> new OperationNotPermittedException("You cannot approve this book return because you did not borrow it"));
+        validateUserIsNotOwner(book, user,"You are not able to perform this task because you did not borrow this book") ;
+        BookTransactionHistory borrowedHistory = bookTransactionHistoryRepository.findBookByOwnerIdAndBookId(bookId, user.getId()).orElseThrow(()-> new OperationNotPermittedException("You cannot approve this book return because you borrower hasnt  returned it yet"));
         borrowedHistory.setReturnApproved(true);
         return bookTransactionHistoryRepository.save(borrowedHistory).getId();
     }
@@ -168,6 +168,7 @@ public class BookService {
     public void uploadBookCoverPicture(MultipartFile file, Authentication connectedUser, Integer bookId) {
         Book book = findBookByIdHelper(bookId);
         User user = (User) connectedUser.getPrincipal();
+        validateUserIsNotOwner(book, user, "You cannot upload a cover picture for this book");
         var bookCover = fileStorageService.savefile(file, user.getId());
         book.setBookCover(bookCover);
         bookRepository.save(book);

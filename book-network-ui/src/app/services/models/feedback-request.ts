@@ -4,5 +4,6 @@
 export interface FeedbackRequest {
   bookId: number;
   comment: string;
+  historyId?: number;
   rating: number;
 }

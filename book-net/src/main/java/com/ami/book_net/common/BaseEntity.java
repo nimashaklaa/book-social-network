@@ -31,12 +31,12 @@ public class BaseEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
     @LastModifiedDate
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private LocalDateTime lastModifiedDate;
     @CreatedBy
     @Column(nullable = false, updatable = false)
     private Integer createdBy;
     @LastModifiedBy
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private Integer lastModifiedBy;
 }

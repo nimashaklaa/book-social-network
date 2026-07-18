@@ -15,5 +15,7 @@ public record FeedbackRequest (
         String comment,
 
         @NotNull(message = "Book id is required")
-        Integer bookId
+        Integer bookId,
+
+        Integer historyId
 ){}

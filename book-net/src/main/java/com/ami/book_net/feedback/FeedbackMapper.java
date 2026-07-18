@@ -17,6 +17,7 @@ public class FeedbackMapper {
                 .rating(request.rating())
                 .comment(request.comment())
                 .book(Book.builder().id(request.bookId()).build())
+                .history(request.historyId() != null? BookTransactionHistory.builder().id(request.historyId()).build():null)
                 .build();
     }
 

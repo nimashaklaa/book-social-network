@@ -694,6 +694,10 @@
                     "bookId": {
                         "type": "integer",
                         "format": "int32"
+                    },
+                    "historyId": {
+                        "type": "integer",
+                        "format": "int32"
                     }
                 },
                 "required": [
@@ -926,15 +930,12 @@
                     "title": {
                         "type": "string"
                     },
-                    "authorName": {
-                        "type": "string"
-                    },
-                    "isbn": {
-                        "type": "string"
-                    },
                     "rate": {
                         "type": "number",
                         "format": "double"
+                    },
+                    "comment": {
+                        "type": "string"
                     },
                     "borrower": {
                         "type": "string"

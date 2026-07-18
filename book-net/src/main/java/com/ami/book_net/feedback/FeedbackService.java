@@ -5,6 +5,7 @@ import com.ami.book_net.book.BookRepository;
 import com.ami.book_net.book.PageResponse;
 import com.ami.book_net.exception.OperationNotPermittedException;
 import com.ami.book_net.user.User;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -52,5 +53,16 @@ public class FeedbackService {
                 feedback.isFirst(),
                 feedback.isLast()
         );
+    }
+    public TransactionFeedbackResponse getReviewForTransaction(Integer bookId, Integer userId, Integer historyId) {
+        return feedbackRepository.findBySpecificTransactionFeedback(bookId, userId, historyId)
+                .map(f -> new TransactionFeedbackResponse(
+                        f.getRating(),
+                        f.getComment(),
+                        f.getBook().getId(),
+                        f.getHistory().getUser().getId(),
+                        f.getHistory().getId()
+                ))
+                .orElseThrow(() -> new EntityNotFoundException("No review found for this specific transaction"));
     }
 }

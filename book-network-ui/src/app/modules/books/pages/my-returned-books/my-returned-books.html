@@ -17,20 +17,22 @@
         <tr>
           <th>#</th>
           <th>Title</th>
-          <th>Author</th>
-          <th>ISBN</th>
+          <th>Borrowed By</th>
+          <th>Borrowed Date</th>
+          <th>Returned Date</th>
           <th>Rate</th>
-          <th>Returned</th>
-          <th>Return Approved</th>
+          <th>Comment</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         @if(books().length === 0) {
           <tr>
-            <td colspan="8" class="text-center py-5 text-muted">
-              <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
-              No returned books yet.
+            <td colspan="9" class="py-5 text-muted">
+              <div class="d-flex flex-column align-items-center gap-2">
+                <i class="fas fa-inbox fa-2x"></i>
+                <span>No returned books yet.</span>
+              </div>
             </td>
           </tr>
         }
@@ -39,35 +41,52 @@
           <tr>
             <td class="text-muted small">{{ page * size + i + 1 }}</td>
             <td class="fw-semibold">{{ book.title }}</td>
-            <td class="text-muted">{{ book.authorName }}</td>
-            <td class="text-muted small font-monospace">{{ book.isbn }}</td>
             <td>
-              <span class="badge bg-warning text-dark">
-                <i class="fas fa-star me-1"></i>{{ book.rate ?? 0 | number:'1.1-1' }}
-              </span>
+              <div class="borrower-info">
+                <div class="borrower-avatar">
+                  <i class="fas fa-user"></i>
+                </div>
+                <span class="borrower-name">{{ book.borrower }}</span>
+              </div>
             </td>
-            <td>
-              @if(book.returned) {
-                <span class="badge bg-success">Yes</span>
-              } @else {
-                <span class="badge bg-secondary">No</span>
+            <td class="text-muted small">{{ book.borrowedDate | date:'MMM d, y' }}</td>
+            <td class="text-muted small">
+              @if (book.returnedDate) {
+                {{ book.returnedDate | date:'MMM d, y' }}
+                } @else {
+                <span class="d-block text-center text-muted">-</span>
               }
             </td>
             <td>
-              @if(book.returnApproved) {
-                <span class="badge bg-success">Approved</span>
-              } @else {
-                <span class="badge bg-warning text-dark">Pending</span>
+              @if(book.rate === 0) {
+                <span class="d-block text-center text-muted">-</span>
+              }@else{
+                {{book.rate}}
+              }
+            </td>
+            <td class="text-muted small">
+              @if (book.comment) {
+                {{book.comment}}
+              }@else{
+                <span class="d-block text-center text-muted">-</span>
               }
             </td>
             <td>
-              <button
-                class="btn btn-sm btn-outline-success"
-                title="Approve Return"
-                [disabled]="book.returnApproved"
-                (click)="approveReturn(book.id!)">
-                <i class="fas fa-check me-1"></i>Approve
-              </button>
+              <div class="d-flex gap-1">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  title="View Details"
+                  (click)="openDetails(book)">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-success"
+                  title="Approve Return"
+                  [disabled]="book.returnApproved"
+                  (click)="approveReturn(book.id!)">
+                  <i class="fas fa-check"></i>
+                </button>
+              </div>
             </td>
           </tr>
         }
@@ -84,4 +103,115 @@
     (next)="goToNextPage()"
     (pageChange)="goToPage($event)"
   />
+</div>
+
+@if(isDrawerOpen()) {
+  <div class="drawer-backdrop" (click)="closeDrawer()"></div>
+}
+
+<div class="offcanvas offcanvas-end"
+     [class.show]="isDrawerOpen()"
+     [style.visibility]="isDrawerOpen() ? 'visible' : 'hidden'"
+     tabindex="-1">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">
+      <i class="fas fa-book-open me-2"></i>Return Details
+    </h5>
+    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="closeDrawer()"></button>
+  </div>
+
+  @if(selectedBook()) {
+    <div class="offcanvas-body">
+
+      <!-- Book Info -->
+      <div class="drawer-section">
+        <p class="section-label">Book</p>
+        <p class="drawer-title">{{ selectedBook()!.title }}</p>
+      </div>
+
+      <hr class="drawer-divider">
+
+      <!-- Borrower Info -->
+      <div class="drawer-section">
+        <p class="section-label">Borrowed By</p>
+        <div class="borrower-card">
+          <div class="borrower-avatar-lg">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <p class="fw-semibold mb-0">{{ selectedBook()!.borrower }}</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="drawer-divider">
+
+      <!-- Dates -->
+      <div class="drawer-section">
+        <p class="section-label">Timeline</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot dot-borrow"></div>
+            <div>
+              <p class="timeline-label">Borrowed</p>
+              <p class="timeline-date">{{ selectedBook()!.borrowedDate | date:'MMMM d, y' }}</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot dot-return"></div>
+            <div>
+              <p class="timeline-label">Returned</p>
+              <p class="timeline-date">
+                @if (selectedBook()?.returnedDate) {
+                  {{ selectedBook()!.returnedDate | date:'MMMM d, y' }}
+                } @else {
+                  <span class="text-muted">Not yet returned</span>
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="drawer-divider">
+
+      <!-- Feedback -->
+      <div class="drawer-section">
+        <p class="section-label">Borrower Feedback</p>
+        <div class="rating-row">
+          @for(star of [1,2,3,4,5]; track star) {
+            <i class="fas fa-star" [class.filled]="star <= (selectedBook()!.rate ?? 0)"></i>
+          }
+          <span class="rating-number">{{ selectedBook()!.rate ?? 0 | number:'1.1-1' }}</span>
+        </div>
+        @if(selectedBook()!.comment) {
+          <div class="comment-box">
+            <i class="fas fa-quote-left quote-icon"></i>
+            <p class="comment-text">{{ selectedBook()!.comment }}</p>
+          </div>
+        } @else {
+          <p class="text-muted small fst-italic">No comment left by borrower.</p>
+        }
+      </div>
+
+      <hr class="drawer-divider">
+
+      <!-- Approve -->
+      <div class="drawer-section">
+        <p class="section-label">Return Status</p>
+        @if(selectedBook()!.returnApproved) {
+          <div class="status-approved">
+            <i class="fas fa-check-circle me-2"></i>Return Approved
+          </div>
+        } @else {
+          <button
+            class="btn btn-success w-100"
+            (click)="approveReturn(selectedBook()!.id!)">
+            <i class="fas fa-check me-2"></i>Approve Return
+          </button>
+        }
+      </div>
+
+    </div>
+  }
 </div>

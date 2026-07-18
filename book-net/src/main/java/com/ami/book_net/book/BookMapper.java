@@ -1,11 +1,22 @@
 package com.ami.book_net.book;
 
+import com.ami.book_net.feedback.Feedback;
+import com.ami.book_net.feedback.FeedbackRepository;
 import com.ami.book_net.file.FileUtils;
 import com.ami.book_net.history.BookTransactionHistory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
+@RequiredArgsConstructor
 public class BookMapper {
+
+    private final FeedbackRepository feedbackRepository;
+
+
+
     public Book toBook(BookRequest request){
         return Book.builder()
                 .id(request.id())
@@ -34,12 +45,16 @@ public class BookMapper {
     }
 
     public BorrowedBookResponse toBorrowedBookResponse(BookTransactionHistory history) {
+        Optional<Feedback> feedbackOptional = feedbackRepository.findBySpecificTransactionFeedback(
+                history.getBook().getId(),
+                history.getUser().getId(),
+                history.getId()
+        );
         return BorrowedBookResponse.builder()
                 .id(history.getBook().getId())
                 .title(history.getBook().getTitle())
-                .authorName(history.getBook().getAuthorName())
-                .isbn(history.getBook().getIsbn())
-                .rate(history.getBook().getRate())
+                .rate(feedbackOptional.map(Feedback::getRating).orElse(0.0))
+                .comment(feedbackOptional.map(Feedback::getComment).orElse(null))
                 .borrower(history.getUser().getEmail())
                 .borrowedDate(history.getCreatedDate())
                 .returnedDate(history.getReturnDate())

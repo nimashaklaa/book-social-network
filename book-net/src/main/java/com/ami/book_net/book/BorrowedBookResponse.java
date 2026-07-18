@@ -12,9 +12,8 @@ import java.time.LocalDateTime;
 public class BorrowedBookResponse {
     private Integer id;
     private String title;
-    private String authorName;
-    private String isbn;
     private double rate;
+    private String comment;
     private String borrower;
     private boolean returned;
     private boolean returnApproved;
