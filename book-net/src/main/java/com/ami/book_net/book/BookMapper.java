@@ -55,6 +55,7 @@ public class BookMapper {
                 .title(history.getBook().getTitle())
                 .rate(feedbackOptional.map(Feedback::getRating).orElse(0.0))
                 .comment(feedbackOptional.map(Feedback::getComment).orElse(null))
+                .bookOwner(history.getBook().getOwner().getEmail())
                 .borrower(history.getUser().getEmail())
                 .borrowedDate(history.getCreatedDate())
                 .returnedDate(history.getReturnDate())

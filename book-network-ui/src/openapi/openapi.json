@@ -937,6 +937,9 @@
                     "comment": {
                         "type": "string"
                     },
+                    "bookOwner": {
+                        "type": "string"
+                    },
                     "borrower": {
                         "type": "string"
                     },

@@ -14,6 +14,7 @@ public class BorrowedBookResponse {
     private String title;
     private double rate;
     private String comment;
+    private String bookOwner;
     private String borrower;
     private boolean returned;
     private boolean returnApproved;
